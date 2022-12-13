@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" type = "text/css"  href = "/views/styles.css"/>
+    
+    <title>N^2 Resturants</title>
+</head>
+<body>
+<div class = "centerNav">
+<div class = "headerStyles">
+    <select id = "firstList" name = "firstList">
+        <option value = "none">No Filter</option>
+        <option value = "countrySelector">Country</option>
+        <option value = "citySelector">City</option>
+        <option value = "cuisineSelector">Cuisine</option>
+    </select>
+
+    <select  id = "secondList" name = "secondList">
+        <option>No Filter1</option>
+      
+    </select>
+    
+    <button id = "applyFilter">APPLY </button>
+    <button  id = "removeFilter">REMOVE </button>
+</div>
+</div>
+
+<div class = "centerTable">
+    <div class = "tableDiv">
+    <table>
+        <th>Name</th>
+        <th>Country</th>
+        <th>City</th>
+        <th>Cuisine Type</th>
+
+        <tr>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+        </tr>
+        
+        <tr>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+        </tr>
+        <tr>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+            <td>TEST DATA</td>
+        </tr>
+     
+
+
+    </table>
+</div>
+</div>
+
+
+<div class = "bottomNav">
+
+    <button div id = "lastButton">LAST </button> 
+
+
+        <p id = "middleText" >Displaying x-y</p>
+
+    
+       
+
+        <button id = "nextButton">NEXT </button>
+    </div>
+    </div>
+</body>
+
+<script>
+let firstFilter = document.querySelector('#firstList');
+firstFilter.addEventListener("change", event => {
+  console.log("heelo");
+  let filter1 = document.querySelector('#firstList option:checked');
+  document.getElementById("secondList").innerHTML = "<option value = ''> No Filter </option>";
+
+
+let passedList = "";
+if (filter1.value == "Country")
+{
+
+  passedList = countries;
+}
+else if (filter1.value == "City")
+{
+  passedList = cities;
+}
+else if (filter1.value == "Cuisine")
+{
+  passedList = cuisine;
+}
+else
+  passedList = restaurants
+for(let ctr = 0; ctr < passedList.length; ctr++)
+{
+  document.getElementById("secondList").innerHTML += `<option value = ''> ${passedList[ctr].options} </option>`;
+}
+
+});
+<%= JSON.stringify(countries) %>
+
+
+</script>
+</html>
