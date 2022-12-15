@@ -84,7 +84,60 @@ firstFilter.addEventListener("change", event => {
   console.log("heelo");
   let filter1 = document.querySelector('#firstList option:checked');
   document.getElementById("secondList").innerHTML = "<option value = ''> No Filter </option>";
-
+document.querySelector("#applyFilter").addEventListener("click", event => {
+  
+  let filter1Value = document.getElementById("firstList").value;
+  let filter2Value = document.getElementById("secondList").value;
+  if (filter2Value == "none")
+  {
+    alert("HELLO");
+  }
+  else
+  {
+  if(filter1Value == "countrySelector")
+  {
+    getCountry()
+  }
+  else if (filter1Value == "citySelector")
+  {
+    getCity()
+  }
+  else if (filter1Value == "cuisineSelector")
+  {
+    getCuisine()
+  }
+  else
+  {
+    getData()
+  }
+}
+});
+document.querySelector("#previous").addEventListener("click", event => {
+    if(page == 0)
+        page = 0;
+    else
+       { page--;
+        if (count - take >= 0){
+        count = count - take;
+      
+        document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${count + take } out of 200`;
+        getData();}
+  
+        }
+});
+document.querySelector("#next").addEventListener("click", event => {
+    page++;
+    if (count + take < 200){
+    count = count + take;
+    document.getElementById("middleText").innerHTML = `Displaying ${count * 1} to ${count +take-1 } out of 200`;
+    getData();
+    }
+    else
+    {
+      getData();
+    }   
+ 
+   
 
 let passedList = "";
 if (filter1.value == "Country")
