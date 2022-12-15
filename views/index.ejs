@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" type = "text/css"  href = "/views/styles.css"/>
+    <title>N^2 Resturants</title>
+</head>
+<body>
+<div class = "centerNav">
+<div class = "headerStyles">
+    <select id = "firstList" name = "firstList">
+        <option value = "none">No Filter</option>
+        <option value = "countrySelector">Country</option>
+        <option value = "citySelector">City</option>
+        <option value = "cuisineSelector">Cuisine</option>
+    </select>
+
+    <select  id = "secondList" name = "secondList">
+        <option>No Filter</option>
+    </select>
+    
+    <button id = "applyFilter">APPLY </button>
+    <button  id = "removeFilter">REMOVE </button>
+</div>
+</div>
+
+<div class = "centerTable">
+    <div class = "tableDiv">
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Cuisine Type</th>
+        </thead>
+
+        <tbody>
+            <tr>
+               
+            </tr>
+        </tbody>    
+ 
+
+
+    </table>
+</div>
+</div>
+
+
+<div class = "bottomNav">
+
+    <button id = "previous" name = "previous">LAST </button> 
+
+
+        <p id = "middleText" name = "middleText">Displaying </p>
+
+       
+
+        <button id = "next" name = "next">NEXT </button>
+    </div>
+    </div>
+    <label>Per page: </label>
+            <select id="perPage">
+                <option value=5>5</option>
+                <option value=10>10</option>
+                <option value=25>25</option>
+                <option value=50>50</option>
+            </select>
+            <script>
+
+            </script>
+</body>
+
+<script type="text/javascript">
+let table = document.querySelector('table tbody');
+let page = 0;
+let take = 5;
+let countries = <%- JSON.stringify(countries) %>;
+let cities = <%- JSON.stringify(cities) %>;
+let cuisines = <%- JSON.stringify(cuisine) %>;
+let select = document.getElementById("secondList option:selected");
+
+
+getData();
+let count = 0;
+//document.getElementById("middleText").innerHTML = `Displaying ${count} of 200`;
+
+let firstFilter = document.querySelector('#firstList');
+firstFilter.addEventListener("change", event => { 
+ 
+document.getElementById("secondList").innerHTML = "<option value = 'noFilter'> No Filter </option>";
+let optionSelected = document.querySelector('#firstList option:checked');
+if(optionSelected.value == "countrySelector"){
+    for(let i =0;i<countries.length;i++){
+    document.getElementById("secondList").innerHTML += `<option value='${countries[i].options}'>${countries[i].options}</option>`;
+    }
+}else if(optionSelected.value == "citySelector"){
+    for(let i =0;i<cities.length;i++){
+    document.getElementById("secondList").innerHTML += `<option value='${cities[i].options}'>${cities[i].options}</option>`;
+    }
+}else if(optionSelected.value == "cuisineSelector"){
+    for(let i =0;i<cuisines.length;i++){
+    document.getElementById("secondList").innerHTML += `<option value='${cuisines[i].options}'>${cuisines[i].options}</option>`;
+    }
+}
+});
+document.querySelector("#previous").addEventListener("click", event => {
+    if(page == 0)
+        page = 0;
+    else
+       { page--;
+        count = count - take;
+        document.getElementById("middleText").innerHTML = `Displaying ${count} of 200`;}
+    getData();
+});
+
+document.querySelector("#next").addEventListener("click", event => {
+    page++;
+    count = count + take;
+    document.getElementById("middleText").innerHTML = `Displaying ${count} of 200`;
+    getData();    
+});
+
+document.querySelector("#perPage").addEventListener("change", event => {
+    pageNumber = 0;
+    let perPageValue = document.querySelector('#perPage option:checked').value;
+    take = perPageValue;
+    getData();
+});
+
+function getData(){
+    fetch(`/places?page=${page}&take=${take}`)
+    .then(response => response.json())
+    .then(data => {
+        table.innerHTML = "";
+        for(let i = 0; i <take; i++) {
+            table.innerHTML += `
+                <tr>
+                    <td>${data[i].name}</td>
+                    <td>${data[i].country}</td>
+                    <td>${data[i].city}</td>
+                    <td>${data[i].cuisine}</td>
+                </tr>`;  
+        }
+            
+    });
+
+    fetch(`/country?page=${page}&take=${take}&option=${select}`)
+        .then(response => response.json())
+        .then(data =>{
+
+    })
+}
+</script>
+</html>

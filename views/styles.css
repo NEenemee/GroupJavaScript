@@ -1,0 +1,101 @@
+.headerStyles
+{
+justify-content: left;
+  
+  display:flex;
+
+}
+
+.centerNav
+{
+
+    display:flex;
+}
+select{
+    margin-top:6px;
+    margin-left:10px;
+    margin-right:10px;
+    
+    height:15px;
+}
+.centerTable
+{
+    display: flex;
+    border-style: solid 1px black;
+    justify-content: center;
+}
+
+.tableDiv
+{
+    justify-content: center;
+    display:flex;
+    border-style: solid 1px black;
+
+}
+tr{
+    border-style: solid 1px black;
+}
+
+
+.bottomNav 
+{
+    display:flex;
+}
+
+td
+{
+    margin-left: 20px;
+    margin-right:20px;
+}
+#applyFilter
+{
+    background-color: rgb(36, 211, 36);
+    width:90px;
+    height:28px;
+}
+#removeFilter
+{
+    background-color: rgb(214, 6, 6);
+}
+button
+{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.bottomNav
+{
+    display: flex;
+   justify-content: center;
+}
+
+#nextButton
+{
+    display: flex;
+    padding-top:4px;
+    justify-content: center;
+    background-color: rgb(95, 138, 255);
+    width:90px;
+    height:28px;
+}
+
+.middleText
+{
+    display:flex;
+    justify-content: center;
+}
+
+#lastButton
+{
+    padding-top:4px;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(95, 138, 255);
+    width:90px;
+    height:28px;
+
+    
+}
+table,thead,tbody {
+    border:.2em;
+}
