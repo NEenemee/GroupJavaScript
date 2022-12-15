@@ -9,34 +9,8 @@ app.listen(3000);
 app.use(express.static(__dirname));
 app.set("view engine", "ejs");
 
-app.get("/countries", (request, response) => {
-  let allData = ("SELECT * FROM restaurants WHERE country = ? LIMIT ?,?");
-  let take = parseInt(request.query.take);
-  let skip = parseInt(request.query.page) * take;
-  let country = request.query.country;
-  allData=  mysql.functions.format(allData, [country,skip, take]);
-  allData = querySql(allData).then(result =>{
-  response.json(result)
-  })
-});
-app.get("/cities", (request, response) => {
-  let allData = ("SELECT * FROM restaurants WHERE city = ? LIMIT ?,?");
-  let take = parseInt(request.query.take);
-  let skip = parseInt(request.query.page) * take;
-  allData=  mysql.functions.format(allData, [request.query.city]);
-  allData = querySql(allData).then(result =>{
-  response.json(result)
-  })
-});
-app.get("/cuisine", (request, response) => {
-  let allData = ("SELECT * FROM restaurants WHERE cuisine = ? LIMIT ?,?");
-  let take = parseInt(request.query.take);
-  let skip = parseInt(request.query.page) * take;
-  allData=  mysql.functions.format(allData, [request.query.cuisine]);
-  allData = querySql(allData).then(result =>{
-  response.json(result)
-  })
-});
+
+
 app.get("/places", (request, response) => {
   let allData = ("SELECT * FROM restaurants ORDER BY name LIMIT ?,?");
   let take = parseInt(request.query.take);
@@ -62,5 +36,28 @@ app.get("/", (request, response) => {
     });
   });
 });
-
+app.get("/country", (request, response) => {
+  let allData = (`SELECT * FROM restaurants WHERE country = ?`);
+  let country = request.query.option;
+  allData=  mysql.functions.format(allData, [country]);
+  allData = querySql(allData).then(result =>{
+  response.json(result)
+  })
+});
+app.get("/cities", (request, response) => {
+  let allData = (`SELECT * FROM restaurants WHERE city = ?`);
+  let city = request.query.city;
+  allData=  mysql.functions.format(allData, [city]);
+  allData = querySql(allData).then(result =>{
+  response.json(result)
+  })
+});
+app.get("/cuisine", (request, response) => {
+  let allData = (`SELECT * FROM restaurants WHERE cuisine = ?`);
+  let cuisine = request.query.cuisine;
+  allData=  mysql.functions.format(allData, [cuisine]);
+  allData = querySql(allData).then(result =>{
+  response.json(result)
+  })
+});
   
