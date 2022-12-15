@@ -46,7 +46,7 @@ app.get("/country", (request, response) => {
 });
 app.get("/cities", (request, response) => {
   let allData = (`SELECT * FROM restaurants WHERE city = ?`);
-  let city = request.query.city;
+  let city = request.query.option;
   allData=  mysql.functions.format(allData, [city]);
   allData = querySql(allData).then(result =>{
   response.json(result)
@@ -54,7 +54,7 @@ app.get("/cities", (request, response) => {
 });
 app.get("/cuisine", (request, response) => {
   let allData = (`SELECT * FROM restaurants WHERE cuisine = ?`);
-  let cuisine = request.query.cuisine;
+  let cuisine = request.query.option;
   allData=  mysql.functions.format(allData, [cuisine]);
   allData = querySql(allData).then(result =>{
   response.json(result)
