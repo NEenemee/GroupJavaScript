@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "stylesheet" type = "text/css"  href = "/views/styles.css"/>
-    
     <title>N^2 Resturants</title>
 </head>
 <body>
@@ -19,8 +18,7 @@
     </select>
 
     <select  id = "secondList" name = "secondList">
-        <option>No Filter1</option>
-      
+        <option>No Filter</option>
     </select>
     
     <button id = "applyFilter">APPLY </button>
@@ -29,33 +27,21 @@
 </div>
 
 <div class = "centerTable">
-    <div class = "tableDiv">
-    <table>
-        <th>Name</th>
-        <th>Country</th>
-        <th>City</th>
-        <th>Cuisine Type</th>
+    <div class = "table-wrapper">
+    <table class="fl-table" >
+        <thead>
+            <th>Name</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Cuisine Type</th>
+        </thead>
 
-        <tr>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-        </tr>
-        
-        <tr>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-        </tr>
-        <tr>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-            <td>TEST DATA</td>
-        </tr>
-     
+        <tbody>
+            <tr>
+               
+            </tr>
+        </tbody>    
+ 
 
 
     </table>
@@ -65,32 +51,135 @@
 
 <div class = "bottomNav">
 
-    <button div id = "lastButton">LAST </button> 
+    <button id = "previous" name = "previous">LAST </button> 
 
 
-        <p id = "middleText" >Displaying x-y</p>
+        <p id = "middleText" name = "middleText"></p>
 
-    
        
 
-        <button id = "nextButton">NEXT </button>
+        <button id = "next" name = "next">NEXT </button>
     </div>
     </div>
+    <label>Per page: </label>
+            <select id="perPage">
+                <option value=5>5</option>
+                <option value=10>10</option>
+                <option value=25>25</option>
+                <option value=50>50</option>
+            </select>
+            <script>
+            </script>
 </body>
 
-<script>
+<script type="text/javascript">
+let table = document.querySelector('table tbody');
+let page = 0;
+let take = 5;
+let countries = <%- JSON.stringify(countries) %>;
+let cities = <%- JSON.stringify(cities) %>;
+let cuisines = <%- JSON.stringify(cuisine) %>;
+getData();
+info();
+let count = 0;
+document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${count + take } out of 200`;
+//document.getElementById("middleText").innerHTML = `Displaying ${count} of 200`;
 let firstFilter = document.querySelector('#firstList');
-firstFilter.addEventListener("change", event => {
-  console.log("heelo");
-  let filter1 = document.querySelector('#firstList option:checked');
-  document.getElementById("secondList").innerHTML = "<option value = ''> No Filter </option>";
-document.querySelector("#applyFilter").addEventListener("click", event => {
+firstFilter.addEventListener("change", event => { 
+ 
+document.getElementById("secondList").innerHTML = "<option value = 'noFilter'> No Filter </option>";
+let optionSelected = document.querySelector('#firstList option:checked');
+if(optionSelected.value == "countrySelector"){
+    for(let i =0;i<countries.length;i++){
+    document.getElementById("secondList").innerHTML += `<option value='${countries[i].options}'>${countries[i].options}</option>`;
+    }
+}else if(optionSelected.value == "citySelector"){
+    for(let i =0;i<cities.length;i++){
+    document.getElementById("secondList").innerHTML += `<option value='${cities[i].options}'>${cities[i].options}</option>`;
+    }
+}else if(optionSelected.value == "cuisineSelector"){
+    for(let i =0;i<cuisines.length;i++){
+    document.getElementById("secondList").innerHTML += `<option value='${cuisines[i].options}'>${cuisines[i].options}</option>`;
+    }
+}
+});
+document.querySelector("#previous").addEventListener("click", event => {
+    if(page == 0)
+        page = 0;
+    else
+       { page--;
+        if (count - take >= 0){
+        count = count - take;
+      
+        document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${count + take } out of 200`;
+        info();}
   
+        }
+});
+document.querySelector("#next").addEventListener("click", event => {
+    page++;
+    
+    if (count + take < 200){
+    count = count + take;
+    document.getElementById("middleText").innerHTML = `Displaying ${count * 1} to ${count +take} out of 200`;
+    info();
+    }
+    else
+    {
+    info();
+    }   
+});    
+document.querySelector("#perPage").addEventListener("change", event => {
+    page = 0;
+    take = 0;
+    count = 0;
+    let perPageValue = document.querySelector('#perPage option:checked').value;
+    take = parseInt(perPageValue);
+    document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${count + take } out of 200`;
+    info();
+});
+document.querySelector("#removeFilter").addEventListener("click",event => {
+    count = 0;
+    document.getElementById("firstList").innerHTML =    
+            `<option value = "none">No Filter</option>
+            <option value = "countrySelector">Country</option>
+            <option value = "citySelector">City</option>
+            <option value = "cuisineSelector">Cuisine</option>`;
+    document.getElementById("secondList").innerHTML =  `<option value = "none">No Filter</option>`;
+    info();
+    document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${count + take } out of 200`;
+});
+function info()
+{
+    let filter1Value = document.getElementById("firstList").value;
+    let filter2Value = document.getElementById("secondList").value;
+ 
+if(filter1Value == "countrySelector")
+  {
+    getCountry()
+  }
+  else if (filter1Value == "citySelector")
+  {
+    getCity()
+  }
+  else if (filter1Value == "cuisineSelector")
+  {
+    getCuisine()
+  }
+  else
+  {
+    getData()
+  }
+}
+document.querySelector("#applyFilter").addEventListener("click", event => {
+    count = 0;
+  console.log("HELLO");
   let filter1Value = document.getElementById("firstList").value;
   let filter2Value = document.getElementById("secondList").value;
-  if (filter2Value == "none")
+  
+  if(filter2Value == "noFilter" && filter1Value != "none")
   {
-    alert("HELLO");
+    alert("Must Select A Seconday Filter")
   }
   else
   {
@@ -110,59 +199,83 @@ document.querySelector("#applyFilter").addEventListener("click", event => {
   {
     getData()
   }
-}
-});
-document.querySelector("#previous").addEventListener("click", event => {
-    if(page == 0)
-        page = 0;
-    else
-       { page--;
-        if (count - take >= 0){
-        count = count - take;
-      
-        document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${count + take } out of 200`;
-        getData();}
   
+}
+    
+});
+function DisplayingNumber(count)
+{
+    document.getElementById("middleText").innerHTML = `Displaying ${count} of 200`;
+}
+function getData(){
+    fetch(`/places?page=${page}&take=${take}`)
+    .then(response => response.json())
+    .then(data => {
+        table.innerHTML = "";
+        for(let i = 0; i <data.length; i++) {
+            table.innerHTML += `
+                <tr>
+                    <td>${data[i].name}</td>
+                    <td>${data[i].country}</td>
+                    <td>${data[i].city}</td>
+                    <td>${data[i].cuisine}</td>
+                </tr>`;  
         }
-});
-document.querySelector("#next").addEventListener("click", event => {
-    page++;
-    if (count + take < 200){
-    count = count + take;
-    document.getElementById("middleText").innerHTML = `Displaying ${count * 1} to ${count +take-1 } out of 200`;
-    getData();
-    }
-    else
-    {
-      getData();
-    }   
- 
-   
-
-let passedList = "";
-if (filter1.value == "Country")
-{
-
-  passedList = countries;
+    })     
+};
+function getCountry(){
+    let select = document.getElementById("secondList").value;
+    fetch(`/country?option=${select}`)
+        .then(response => response.json())
+        .then(data =>{
+        table.innerHTML = "";
+        for(let i = 0; i <data.length; i++) {
+            table.innerHTML += `
+                <tr>
+                    <td>${data[i].name}</td>
+                    <td>${data[i].country}</td>
+                    <td>${data[i].city}</td>
+                    <td>${data[i].cuisine}</td>
+                </tr>`;  
+        }
+        document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${data.length} out of ${data.length}`;
+    });
 }
-else if (filter1.value == "City")
-{
-  passedList = cities;
+function getCity(){
+    let select = document.getElementById("secondList").value;
+    fetch(`/cities?option=${select}`)
+        .then(response => response.json())
+        .then(data =>{
+        table.innerHTML = "";
+        for(let i = 0; i <data.length; i++) {
+            table.innerHTML += `
+                <tr>
+                    <td>${data[i].name}</td>
+                    <td>${data[i].country}</td>
+                    <td>${data[i].city}</td>
+                    <td>${data[i].cuisine}</td>
+                </tr>`;  
+        }
+        document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${data.length} out of ${data.length}`;
+    });
 }
-else if (filter1.value == "Cuisine")
-{
-  passedList = cuisine;
+function getCuisine(){
+    let select = document.getElementById("secondList").value;
+    fetch(`/cuisine?option=${select}`)
+        .then(response => response.json())
+        .then(data =>{
+        table.innerHTML = "";
+        for(let i = 0; i <data.length; i++) {
+            table.innerHTML += `
+                <tr>
+                    <td>${data[i].name}</td>
+                    <td>${data[i].country}</td>
+                    <td>${data[i].city}</td>
+                    <td>${data[i].cuisine}</td>
+                </tr>`;  
+        }
+        document.getElementById("middleText").innerHTML = `Displaying ${count + 1} to ${data.length} out of ${data.length}`;
+    });
 }
-else
-  passedList = restaurants
-for(let ctr = 0; ctr < passedList.length; ctr++)
-{
-  document.getElementById("secondList").innerHTML += `<option value = ''> ${passedList[ctr].options} </option>`;
-}
-
-});
-<%= JSON.stringify(countries) %>
-
-
 </script>
 </html>
